@@ -269,28 +269,40 @@ export default function Admin() {
             {/* 6 Stats Cards Grid */}
             <div className="row g-3 g-md-4 mb-4">
               <div className="col-12 col-sm-6 col-xl-4">
-                <StatsCard
-                  title="Total Movies"
-                  value={stats.totalMovies}
-                  icon={faFilm}
-                  color="#e50914"
-                />
+                <Link to="/addmovie" style={{ textDecoration: 'none' }} title="Click to manage movies">
+                  <div className="hover-scale" style={{ cursor: 'pointer' }}>
+                    <StatsCard
+                      title="Total Movies"
+                      value={stats.totalMovies}
+                      icon={faFilm}
+                      color="#e50914"
+                    />
+                  </div>
+                </Link>
               </div>
               <div className="col-12 col-sm-6 col-xl-4">
-                <StatsCard
-                  title="Total Theatres"
-                  value={stats.totalTheatres}
-                  icon={faBuilding}
-                  color="#0096ff"
-                />
+                <Link to="/addtheatre" style={{ textDecoration: 'none' }} title="Click to manage theatres">
+                  <div className="hover-scale" style={{ cursor: 'pointer' }}>
+                    <StatsCard
+                      title="Total Theatres"
+                      value={stats.totalTheatres}
+                      icon={faBuilding}
+                      color="#0096ff"
+                    />
+                  </div>
+                </Link>
               </div>
               <div className="col-12 col-sm-6 col-xl-4">
-                <StatsCard
-                  title="Total Shows"
-                  value={stats.totalShows}
-                  icon={faCalendarDays}
-                  color="#2ecc71"
-                />
+                <Link to="/addshow" style={{ textDecoration: 'none' }} title="Click to manage scheduled shows">
+                  <div className="hover-scale" style={{ cursor: 'pointer' }}>
+                    <StatsCard
+                      title="Total Shows"
+                      value={stats.totalShows}
+                      icon={faCalendarDays}
+                      color="#2ecc71"
+                    />
+                  </div>
+                </Link>
               </div>
               <div className="col-12 col-sm-6 col-xl-4">
                 <Link to="/admin/users" style={{ textDecoration: 'none' }} title="Click to view & manage registered users">
@@ -305,20 +317,28 @@ export default function Admin() {
                 </Link>
               </div>
               <div className="col-12 col-sm-6 col-xl-4">
-                <StatsCard
-                  title="Total Bookings"
-                  value={stats.totalBookings}
-                  icon={faTicket}
-                  color="#f39c12"
-                />
+                <Link to="/adminbookings" style={{ textDecoration: 'none' }} title="Click to inspect all bookings">
+                  <div className="hover-scale" style={{ cursor: 'pointer' }}>
+                    <StatsCard
+                      title="Total Bookings"
+                      value={stats.totalBookings}
+                      icon={faTicket}
+                      color="#f39c12"
+                    />
+                  </div>
+                </Link>
               </div>
               <div className="col-12 col-sm-6 col-xl-4">
-                <StatsCard
-                  title="Total Revenue"
-                  value={`₹${Number(stats.totalRevenue).toLocaleString('en-IN')}`}
-                  icon={faIndianRupeeSign}
-                  color="#ffd700"
-                />
+                <Link to="/admintransactions" style={{ textDecoration: 'none' }} title="Click to view financial transactions & refunds">
+                  <div className="hover-scale" style={{ cursor: 'pointer' }}>
+                    <StatsCard
+                      title="Total Revenue"
+                      value={`₹${Number(stats.totalRevenue).toLocaleString('en-IN')}`}
+                      icon={faIndianRupeeSign}
+                      color="#ffd700"
+                    />
+                  </div>
+                </Link>
               </div>
             </div>
 

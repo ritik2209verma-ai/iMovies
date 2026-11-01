@@ -17,6 +17,10 @@ export function formatTicketWhatsAppMessage(booking) {
   const amount = booking.totalAmount !== undefined ? `₹${booking.totalAmount}` : 'N/A';
   const status = booking.paymentStatus || 'Completed';
 
+  const fullId = booking.bookingId || booking._id;
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const verifyLinkLine = fullId && origin ? `\n🔗 *Live E-Ticket & QR Pass:* ${origin}/tickets/view/${fullId}` : '';
+
   const message = 
 `🍿 *iMovies Cinema Ticket Confirmation* 🎬
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -27,10 +31,10 @@ export function formatTicketWhatsAppMessage(booking) {
 ⏰ *Show Time:* ${time}
 💺 *Seats:* ${seats}
 💰 *Total Amount:* ${amount}
-✅ *Status:* ${status}
+✅ *Status:* ${status}${verifyLinkLine}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✨ _Present this ticket at the cinema box-office counter._
-🔗 *iMovies App:* Instant reservations & HD trailers online!`;
+🌐 *iMovies Cinema:* Instant reservations & HD trailers online!`;
 
   return message;
 }

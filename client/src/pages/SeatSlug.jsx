@@ -99,13 +99,11 @@ export default function SeatSlug() {
     const backendHost =
       import.meta.env.VITE_SOCKET_URL ||
       (import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '') : '') ||
-      'https://imovies1802.onrender.com';
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? `${window.location.protocol}//localhost:5000`
+        : 'https://imovies1802.onrender.com');
 
-    const socketHost =
-      window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? (import.meta.env.VITE_SOCKET_URL || `${window.location.protocol}//localhost:5000`)
-        : backendHost;
-    const socket = io(socketHost, {
+    const socket = io(backendHost, {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 5
     });
