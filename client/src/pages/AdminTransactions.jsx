@@ -11,7 +11,8 @@ import {
   faCalendarDays,
   faReceipt,
   faUserShield,
-  faCreditCard
+  faCreditCard,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function AdminTransactionsPage() {
@@ -19,6 +20,7 @@ export default function AdminTransactionsPage() {
 
   const navLinks = [
     { name: 'Dashboard', path: '/admin', icon: faGaugeHigh },
+    { name: 'Users', path: '/admin/users', icon: faUsers },
     { name: 'Movies', path: '/addmovie', icon: faFilm },
     { name: 'Theatres', path: '/addtheatre', icon: faBuilding },
     { name: 'Shows', path: '/addshow', icon: faCalendarDays },

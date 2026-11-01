@@ -19,9 +19,15 @@ export function parseShowDateTime(showDate, showTime) {
 
     if (dateStr.includes('-')) {
       const parts = dateStr.split('T')[0].split('-');
-      year = parseInt(parts[0], 10);
-      month = parseInt(parts[1], 10) - 1;
-      day = parseInt(parts[2], 10);
+      if (parts[0].length === 4) {
+        year = parseInt(parts[0], 10);
+        month = parseInt(parts[1], 10) - 1;
+        day = parseInt(parts[2], 10);
+      } else {
+        day = parseInt(parts[0], 10);
+        month = parseInt(parts[1], 10) - 1;
+        year = parseInt(parts[2], 10);
+      }
     } else if (dateStr.includes('/')) {
       const parts = dateStr.split('/');
       if (parts[0].length === 4) {
@@ -85,8 +91,11 @@ export function getCancellationEligibility(showDate, showTime) {
   if (!showDateTime) {
     return {
       canCancel: false,
+      eligible: false,
       diffHours: 0,
       cutoffTime: null,
+      hoursUntilCutoff: 0,
+      minutesUntilCutoff: 0,
       reason: 'Invalid showtime'
     };
   }

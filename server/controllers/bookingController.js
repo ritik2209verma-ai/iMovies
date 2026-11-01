@@ -222,12 +222,10 @@ const createBooking = async (req, res) => {
     if (!resolvedPosterUrl && (movieId || show.movieId)) {
       try {
         const targetMovieId = movieId || show.movieId;
-        const movieDoc = await Movie.findOne({
-          $or: [
-            { movieId: targetMovieId },
-            { _id: mongoose.isValidObjectId(targetMovieId) ? targetMovieId : null }
-          ]
-        });
+        let movieDoc = await Movie.findOne({ movieId: targetMovieId });
+        if (!movieDoc && mongoose.isValidObjectId(targetMovieId)) {
+          movieDoc = await Movie.findById(targetMovieId);
+        }
         if (movieDoc && movieDoc.posterUrl) {
           resolvedPosterUrl = movieDoc.posterUrl;
         }
@@ -499,12 +497,11 @@ const getPublicTicket = async (req, res) => {
       });
     }
 
-    const booking = await Booking.findOne({
-      $or: [
-        { bookingId: bookingId.trim() },
-        { _id: mongoose.isValidObjectId(bookingId.trim()) ? bookingId.trim() : null }
-      ]
-    });
+    const trimmedId = bookingId.trim();
+    let booking = await Booking.findOne({ bookingId: trimmedId });
+    if (!booking && mongoose.isValidObjectId(trimmedId)) {
+      booking = await Booking.findById(trimmedId);
+    }
 
     if (!booking) {
       return res.status(404).json({
@@ -517,12 +514,10 @@ const getPublicTicket = async (req, res) => {
     let posterUrl = booking.posterUrl || '';
     if (!posterUrl && booking.movieId) {
       try {
-        const movieDoc = await Movie.findOne({
-          $or: [
-            { movieId: booking.movieId },
-            { _id: mongoose.isValidObjectId(booking.movieId) ? booking.movieId : null }
-          ]
-        });
+        let movieDoc = await Movie.findOne({ movieId: booking.movieId });
+        if (!movieDoc && mongoose.isValidObjectId(booking.movieId)) {
+          movieDoc = await Movie.findById(booking.movieId);
+        }
         if (movieDoc && movieDoc.posterUrl) {
           posterUrl = movieDoc.posterUrl;
         }

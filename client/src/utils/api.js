@@ -15,6 +15,9 @@ API.interceptors.request.use(
     const adminToken = localStorage.getItem('imovies-admin-token');
     if (token) {
       config.headers['auth-token'] = token;
+      config.headers['Authorization'] = `Bearer ${token}`;
+    } else if (adminToken) {
+      config.headers['Authorization'] = `Bearer ${adminToken}`;
     }
     if (adminToken) {
       config.headers['admin-token'] = adminToken;

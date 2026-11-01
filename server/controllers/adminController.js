@@ -1,10 +1,15 @@
+const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
+const Razorpay = require('razorpay');
 const Movie = require('../models/movieModel');
 const Theatre = require('../models/theatreModel');
 const Show = require('../models/showModel');
 const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 const Admin = require('../models/adminModel');
+const Favorite = require('../models/favoriteModel');
 const bcrypt = require('bcryptjs');
+const { sendBookingStatusUpdateEmail } = require('../services/emailService');
 
 /**
  * Get dashboard aggregated metrics
@@ -115,6 +120,13 @@ const deleteUser = async (req, res) => {
       });
     }
 
+    if (!mongoose.Types.ObjectId.isValid(targetId)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid user ID format'
+      });
+    }
+
     const user = await User.findById(targetId);
 
     if (!user) {
@@ -132,8 +144,14 @@ const deleteUser = async (req, res) => {
       });
     }
 
-    // Security check: Prevent self-deletion if current admin matches user id
-    if (req.user && req.user.id && req.user.id.toString() === targetId.toString()) {
+    // Security check: Prevent self-deletion if current admin matches user id or email
+    const currentAdminId = req.admin?.id || req.admin?._id || req.user?.id || req.user?._id;
+    const currentAdminEmail = (req.admin?.email || req.user?.email || '').toLowerCase();
+
+    if (
+      (currentAdminId && currentAdminId.toString() === targetId.toString()) ||
+      (currentAdminEmail && user.email && currentAdminEmail === user.email.toLowerCase())
+    ) {
       return res.status(403).json({
         success: false,
         error: 'Action denied: You cannot delete your currently active administrative account.'
@@ -141,6 +159,13 @@ const deleteUser = async (req, res) => {
     }
 
     await User.findByIdAndDelete(targetId);
+
+    // Cascade: Clean up favorites associated with this deleted user email
+    if (user.email) {
+      await Favorite.deleteMany({ userEmail: user.email.toLowerCase() }).catch((favErr) => {
+        console.warn('[adminController] Note cleaning user favorites:', favErr.message);
+      });
+    }
 
     return res.status(200).json({
       success: true,
@@ -159,11 +184,6 @@ const deleteUser = async (req, res) => {
     });
   }
 };
-
-const mongoose = require('mongoose');
-const { v4: uuidv4 } = require('uuid');
-const Razorpay = require('razorpay');
-const { sendBookingStatusUpdateEmail } = require('../services/emailService');
 
 const getRazorpayInstance = () => {
   const key_id = process.env.RAZORPAY_KEY_ID;

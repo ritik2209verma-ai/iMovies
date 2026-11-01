@@ -17,7 +17,8 @@ import {
   faReceipt,
   faSun,
   faMoon,
-  faCreditCard
+  faCreditCard,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import { useTheme } from '../context/ThemeContext';
 
@@ -92,6 +93,18 @@ export default function Header() {
                   >
                     <FontAwesomeIcon icon={faGaugeHigh} />
                     <span>Dashboard</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/admin/users"
+                    onClick={closeNav}
+                    className={`nav-link px-2 d-flex align-items-center gap-2 ${
+                      isActive('/admin/users') ? 'active text-danger fw-semibold' : 'text-light'
+                    }`}
+                  >
+                    <FontAwesomeIcon icon={faUsers} />
+                    <span>Users</span>
                   </Link>
                 </li>
                 <li className="nav-item">
