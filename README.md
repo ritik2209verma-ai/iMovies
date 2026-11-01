@@ -1,6 +1,20 @@
 # 🎬 iMovies - Full-Stack Movie Ticket Booking & Cinema Management Platform
 
-A modern, production-grade MERN stack movie booking platform featuring live market movies via TMDB, real-time interactive seat maps with hold locking using WebSockets, Razorpay payment processing (Cards, UPI, Netbanking), automated Nodemailer email ticket confirmations, WhatsApp digital ticket sharing, and an advanced Admin Management Suite.
+A modern, production-grade MERN stack movie booking platform featuring live market movies via TMDB, real-time interactive seat maps with hold locking using WebSockets, Razorpay payment processing (Cards, UPI, Netbanking), automated Brevo transactional email ticket confirmations & OTP verification, dynamic QR pass generation, WhatsApp digital ticket sharing, and an advanced Admin Management Suite.
+
+---
+
+## 📁 Project Documentation
+
+Comprehensive technical documentation, architecture blueprints, database schemas, and workflows are available in the [`docs/`](./docs) directory:
+
+| Document | Description | Link |
+| :--- | :--- | :--- |
+| **🏛️ System Architecture** | Detailed MVC pattern implementation, Mongoose models, Express controllers, React presentation views, request-response lifecycles, and real-time Socket.io events. | [`docs/architecture.md`](./docs/architecture.md) |
+| **👥 Team Roles & Responsibilities** | Complete team contribution breakdown matrix detailing module ownership, core tasks, and engineering roles. | [`docs/roles.md`](./docs/roles.md) |
+| **📊 Entity-Relationship (ER) Diagram** | Database schema design, primary/foreign keys, cardinality associations, and compound indexes across all 8 collections. | [`docs/diagrams/er-diagram.md`](./docs/diagrams/er-diagram.md) |
+| **🗺️ User Flow & Journey Diagram** | Complete customer journey from landing page discovery through showtimes, seat holding, Razorpay checkout, QR verification, and 2-hour cancellation. | [`docs/diagrams/user-flow.md`](./docs/diagrams/user-flow.md) |
+| **🎨 Visual Diagrams Overview** | Index and visual guide for all Mermaid.js diagrams. | [`docs/diagrams/README.md`](./docs/diagrams/README.md) |
 
 ---
 
@@ -31,9 +45,10 @@ A modern, production-grade MERN stack movie booking platform featuring live mark
 - **Frontend:** React 18, Vite, React Router DOM v6, Bootstrap 5, FontAwesome, React Toastify, Axios, Socket.io-client
 - **Backend:** Node.js, Express.js, MongoDB with Mongoose, Socket.io, JWT (JSON Web Tokens), Bcrypt.js
 - **Integrations:**
-  - **TMDB API** (Movie Discovery & Metadata)
-  - **Razorpay** (Payment Processing & Refunds)
-  - **Nodemailer** (Transactional Confirmation Emails)
+  - **TMDB API** (Movie Discovery, Trailers & Metadata)
+  - **Razorpay** (Payment Processing, UPI / Cards / QR, & Instant Refunds)
+  - **Brevo / Sendinblue** (Transactional Emails, Account Verification OTP, Password Recovery, & E-Ticket Delivery)
+  - **QRCode** (Dynamic Scannable Pass Generation)
 
 ---
 
@@ -41,24 +56,33 @@ A modern, production-grade MERN stack movie booking platform featuring live mark
 
 ```text
 iMovies/
-├── client/                     # React Frontend
+├── docs/                       # Project Documentation & Architecture
+│   ├── architecture.md         # MVC pattern, controllers, models, request lifecycle
+│   ├── roles.md                # Team roles, responsibilities & contribution matrix
+│   └── diagrams/               # Visual system diagrams
+│       ├── er-diagram.md       # Entity-Relationship diagram (Mermaid.js)
+│       ├── user-flow.md        # User journey flowchart (Mermaid.js)
+│       └── README.md           # Visual diagrams index
+│
+├── client/                     # React Frontend (Vite SPA)
 │   ├── src/
-│   │   ├── components/         # Navbar, MovieCard, Modals, Checkout, Legenda
+│   │   ├── components/         # Navbar, MovieCard, Modals, Checkout, TicketModal
 │   │   ├── context/            # ThemeContext (Dark / Light)
 │   │   ├── hooks/              # Custom data fetching hooks
-│   │   ├── pages/              # Landing, Home, SeatSlug, Bookings, Admin, etc.
-│   │   └── utils/              # API interceptors, guards, whatsapp helpers
+│   │   ├── pages/              # Landing, Home, SeatSlug, Bookings, AdminUsers, etc.
+│   │   └── utils/              # API interceptors, guards, timeHelper, whatsapp
 │   ├── .env.example
 │   ├── package.json
 │   └── vite.config.js
 │
 ├── server/                     # Express Backend
-│   ├── controllers/            # Auth, Movie, Theatre, Show, Booking, Admin
+│   ├── config/                 # Email and environment configuration
+│   ├── controllers/            # Auth, Movie, Theatre, Show, Booking, Admin, Payment
 │   ├── middlewares/            # fetchUser, fetchAdmin RBAC guards
-│   ├── models/                 # User, Admin, Movie, Theatre, Show, Booking
+│   ├── models/                 # User, Admin, Movie, Theatre, Show, Booking, Review
 │   ├── routes/                 # Express API endpoints
-│   ├── services/               # TMDB & Nodemailer services
-│   ├── utils/                  # Cron seat-cleanup & show reminders
+│   ├── services/               # Brevo transactional email & TMDB services
+│   ├── utils/                  # timeHelper, cron cleanup & mailers
 │   ├── .env.example
 │   ├── server.js
 │   └── package.json
